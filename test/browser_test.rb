@@ -19,6 +19,7 @@ class BrowserTest < Test::Unit::TestCase
   FIREFOX               = "Mozilla/5.0 (X11; U; Linux i686; pl-PL; rv:1.9.0.2) Gecko/20121223 Ubuntu/9.25 (jaunty) Firefox/3.8"
   FIREFOX_MODERN        = "Mozilla/5.0 (X11; Ubuntu; Linux armv7l; rv:17.0) Gecko/20100101 Firefox/17.0"
   FIREFOX_TABLET        = "Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0"
+  FIREFOX_PHONE         = "Mozilla/5.0 (Android; Mobile; rv:23.0) Gecko/23.0 Firefox/23.0"
   CHROME                = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_4; en-US) AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.375.99 Safari/533.4"
   MOBILE_CHROME         = "Mozilla/5.0 (iPhone; U; CPU iPhone OS 5_1_1 like Mac OS X; en) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/9B206 Safari/7534.48.3"
   ANDROID               = "Android SDK 1.5r3: Mozilla/5.0 (Linux; U; Android 1.5; de-; sdk Build/CUPCAKE) AppleWebkit/528.5+ (KHTML, like Gecko) Version/3.1.2 Mobile Safari/525.20.1"
@@ -45,6 +46,9 @@ class BrowserTest < Test::Unit::TestCase
   IOS5                  = "Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3"
   IOS6                  = "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25"
   PLAYBOOK              = "Mozilla/5.0 (PlayBook; U; RIM Tablet OS 2.1.0; en-US) AppleWebKit/536.2+ (KHTML, like Gecko) Version/7.2.1.0 Safari/536.2+"
+  DEVICE1               = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.76 Safari/537.36"
+  DEVICE2               = "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.76 Safari/537.36"
+  DEVICE3               = "Mozilla/5.0 (Linux; U; Android 4.1.1; pl-pl; Kruger Matz 0973 Build/JRO03H) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30"
 
   def setup
     @browser = Browser.new
@@ -645,6 +649,28 @@ class BrowserTest < Test::Unit::TestCase
     assert @browser.webkit?
     assert @browser.modern?
     assert @browser.mobile?
+  end
+
+  def test_for_firefox_phone
+    @browser.ua = FIREFOX_PHONE
+
+    assert ! @browser.tablet?
+    assert @browser.modern?
+    assert @browser.mobile?
+    assert_equal "23", @browser.version
+  end
+  # DEVICE1               = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.76 Safari/537.36"
+  # DEVICE2               = "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.76 Safari/537.36"
+  # DEVICE3               = "Mozilla/5.0 (Linux; U; Android 4.1.1; pl-pl; Kruger Matz 0973 Build/JRO03H) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30"
+
+  def test_for_device1
+    # DEVICE1  = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.76 Safari/537.36"
+    @browser.ua = DEVICE3
+
+    assert @browser.tablet?
+    assert @browser.modern?
+    assert @browser.mobile?
+    assert_equal "29", @browser.version
   end
 
   def test_nook
